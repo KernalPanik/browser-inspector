@@ -1,0 +1,1 @@
+PATH_TO_BROWSER = "C:/Users/Paulikas/AppData/Local/Google/Chrome/User Data"

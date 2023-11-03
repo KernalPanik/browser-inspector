@@ -11,6 +11,8 @@ import os
 from json import JSONEncoder
 import json
 
+from config import PATH_TO_BROWSER
+
 class Visit:
     def __init__(self, id, url, visit_time, from_visit, visit_duration) -> None:
         self.id = id
@@ -77,10 +79,8 @@ def map_visits_to_urls(urls: list, visits: list) -> list:
     return url_visits
 
 if __name__ == "__main__":
-    if (len(sys.argv) < 2):
-        print("Missing args, provide path to browser profile root!")
-    
-    browser_profile_root = sys.argv[1]
+        
+    browser_profile_root = os.path.join(PATH_TO_BROWSER)
     if (not os.path.isdir(browser_profile_root)):
         print("Directory at {} seem to not exist.".format(browser_profile_root))
         exit(1)
