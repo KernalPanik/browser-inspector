@@ -11,8 +11,6 @@ import os
 from json import JSONEncoder
 import json
 
-from config import PATH_TO_BROWSER
-
 class Visit:
     def __init__(self, id, url, visit_time, from_visit, visit_duration) -> None:
         self.id = id
@@ -78,9 +76,16 @@ def map_visits_to_urls(urls: list, visits: list) -> list:
 
     return url_visits
 
-if __name__ == "__main__":
-        
-    browser_profile_root = os.path.join(PATH_TO_BROWSER)
+def get_hisotry_data(path_to_root: str) -> str:
+    '''
+        Function that gets browser history data such as visited URL and time of visits.
+        Arguments:
+        path_to_root: str - a path to browser profile root folder.
+
+        Return:
+        str - JSON type data of browser history
+    '''
+    browser_profile_root = os.path.join(path_to_root)
     if (not os.path.isdir(browser_profile_root)):
         print("Directory at {} seem to not exist.".format(browser_profile_root))
         exit(1)
@@ -90,4 +95,6 @@ if __name__ == "__main__":
 
     url_visits = map_visits_to_urls(urls, visits)
     url_visit_dump = json.dumps(url_visits, indent=4, cls=CustomEncoder)
-    print(url_visit_dump)
+    # print(url_visit_dump)
+
+    return url_visit_dump
