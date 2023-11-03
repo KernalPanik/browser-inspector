@@ -11,32 +11,7 @@ import os
 from json import JSONEncoder
 import json
 
-class Visit:
-    def __init__(self, id, url, visit_time, from_visit, visit_duration) -> None:
-        self.id = id
-        self.url = url
-        self.visit_time = visit_time
-        self.visit_duration = visit_duration
-        self.from_visit = from_visit
-
-class VisitedUrl:
-    def __init__(self, id, url, title, visit_count, typed_count, last_visit_time) -> None:
-        self.id = id
-        self.url = url
-        self.title = title
-        self.visit_count = visit_count
-        self.typed_count = typed_count
-        self.last_visit_time = last_visit_time
-
-class VisitInfo:
-    def __init__(self, visitedUrl: VisitedUrl) -> None:
-        self.id = visitedUrl.id
-        self.url = visitedUrl.url
-        self.title = visitedUrl.title
-        self.visit_count = visitedUrl.visit_count
-        self.typed_count = visitedUrl.typed_count
-        self.last_visit_time = visitedUrl.last_visit_time
-        self.visits = []
+from models import Visit, VisitInfo, VisitedUrl
 
 class CustomEncoder(JSONEncoder):
     def default(self, o):
@@ -76,14 +51,14 @@ def map_visits_to_urls(urls: list, visits: list) -> list:
 
     return url_visits
 
-def get_hisotry_data(path_to_root: str) -> str:
+def get_hisotry_data(path_to_root: str) -> list[VisitInfo]:
     '''
         Function that gets browser history data such as visited URL and time of visits.
         Arguments:
         path_to_root: str - a path to browser profile root folder.
 
         Return:
-        str - JSON type data of browser history
+        list - of URL visited
     '''
     browser_profile_root = os.path.join(path_to_root)
     if (not os.path.isdir(browser_profile_root)):
@@ -94,7 +69,8 @@ def get_hisotry_data(path_to_root: str) -> str:
     urls = get_urls(browser_profile_root)
 
     url_visits = map_visits_to_urls(urls, visits)
-    url_visit_dump = json.dumps(url_visits, indent=4, cls=CustomEncoder)
-    # print(url_visit_dump)
 
-    return url_visit_dump
+    return url_visits
+
+def dump_json(data: list[VisitInfo]) -> str:
+    return json.dumps(data, indent=4, cls=CustomEncoder)
