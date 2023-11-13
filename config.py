@@ -1,3 +1,4 @@
+# Files paths differ for users. Descriptions possible file paths for different OS can be found in README file
 PATH_TO_BROWSER = "C:/Users/Paulikas/AppData/Local/Google/Chrome/User Data"
 
 # Date format YYYY-MM-DD as a string
