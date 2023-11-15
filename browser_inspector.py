@@ -1,10 +1,3 @@
-'''
-    Author: Lukas Michnevic
-
-    Parse Chrome browser history into computer readable JSON format.
-
-    2023
-'''
 import sys
 import sqlite3
 import os
