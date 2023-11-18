@@ -17,8 +17,6 @@ class Analyzer:
 
         df = pd.DataFrame([ x.as_dict() for x in self.browser_data])
         
-        
-
         print(df[["id", 'url', 'title']])
 
         df.info()
