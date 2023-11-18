@@ -15,3 +15,5 @@ This script expects a path to a browser profile root directory. In Chromium brow
 **Also note** that this tool does not obfuscate browsing history in any way.
 
 This script is expected to work with any Chromium based browser.
+
+TODO: Describe how to make custom profiles for testing
