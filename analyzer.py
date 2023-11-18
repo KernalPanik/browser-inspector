@@ -8,24 +8,22 @@ class Analyzer:
 
     def __init__(self, browser_data: list[VisitInfo]) -> None:
         self.browser_data = browser_data
+        self.df = self.to_dataframe()
+        self.visited_url = self.get_visited_url(self.df)
+        self.visits = self.get_visit(self.df)
 
     def analyze_history(self):
         '''
         A method to structure the data and provide insigts
         '''
 
-        df = pd.DataFrame([ x.as_dict() for x in self.browser_data])
-        
-        visited_url = self.get_visited_url(df)
+        print(self.visited_url)
+        print(self.visits)
 
-        visits = self.get_visit(df)
+        self.pred_data_for_to_ip(self.visited_url)
 
-        print(visited_url)
-        print(visits)
-
-        self.pred_data_for_to_ip(visited_url)
-
-    
+    def to_dataframe(self) -> pd.DataFrame:
+        return pd.DataFrame([ x.as_dict() for x in self.browser_data])
 
     def get_visited_url(self, history_data: pd.DataFrame)-> pd.DataFrame:
         
@@ -64,13 +62,9 @@ class Analyzer:
         
         preped_df = pd.DataFrame(data=unique_domains, columns=["domain"])
 
-        print(preped_df)
-
         preped_df["time_spent"] = preped_df.domain.apply(lambda x: inter_df[inter_df.domain == x]["time_spent"].sum())
 
         preped_df["time_spent"] = preped_df.time_spent.apply(lambda x: round(x/1000000, 2))
-
-        print(preped_df)
 
         return preped_df
 
@@ -79,14 +73,10 @@ class Analyzer:
         unique_domains = visited_url["domain"].unique()
 
         inter_df = visited_url[["id", "url", "domain", "visit_count"]]
-
-        print(inter_df)
         
         preped_df = pd.DataFrame(data=unique_domains, columns=["domain"])
 
         preped_df["visit_count"] = preped_df.domain.apply(lambda x: inter_df[inter_df.domain == x]["visit_count"].sum())
-
-        print(preped_df)
 
         return preped_df
         
@@ -125,7 +115,7 @@ class Analyzer:
 
         preped_df["visit_count"] = preped_df.domain.apply(lambda x: inter_df[inter_df.domain == x]["visit_count"].sum())
 
-        print(preped_df)
+        return preped_df
         
 
     def parse_domain(self, url: str) -> str:

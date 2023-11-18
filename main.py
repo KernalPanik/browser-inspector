@@ -2,13 +2,17 @@ from analyzer import Analyzer
 from config import PATH_TO_BROWSER
 from browser_inspector import get_hisotry_data
 from pdf_engine import *
+from ploter import Ploter
 
 if __name__ == "__main__":
     path_to_root = PATH_TO_BROWSER
     browser_data = get_hisotry_data(path_to_root)
 
     analyzer = Analyzer(browser_data)
-    analyzer.analyze_history()
+    # analyzer.analyze_history()
+
+    ploter = Ploter()
+    ploter.plot_column(analyzer.prep_data_for_time_spent(analyzer.visited_url, analyzer.visits), "Time spent")
 
     # Some testing of PDF engine, delete later
     # md = pdf_start_markdown("testmd.md")
