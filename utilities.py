@@ -23,6 +23,10 @@ Converts given date into POSIX timestamp in seconds, or into Win32 (LDAP) format
 '''
 def date_to_epoch(date_string: str, time_epoch_format: TimeEpochFormat) -> int:
     epoch = 0
+
+    if (date_string == 'none'):
+        return epoch;
+
     if (time_epoch_format == TimeEpochFormat.UNIX_EPOCH):
         epoch = int(datetime.datetime.strptime(date_string, "%Y-%m-%d").timestamp())
     elif (time_epoch_format == TimeEpochFormat.ISO_8601_EPOCH):

@@ -1,5 +1,5 @@
 from analyzer import Analyzer
-from config import PATH_TO_BROWSER, START_DATE, END_DATE
+from config import PATH_TO_BROWSER, START_DATE, END_DATE, SUSPICIOUS_SITES
 from pdf_engine import *
 from utilities import *
 from adaptors.chromium_inspector import ChromiumInspector
@@ -27,6 +27,10 @@ if __name__ == "__main__":
 
     path_to_root = PATH_TO_BROWSER
     browser_inspector = ChromiumInspector()
-    browser_data = browser_inspector.get_history_data(path_to_root, utilities.date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), utilities.date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH))
-    browser_data_json = browser_inspector.dump_json()
-    print(browser_data_json)
+    sus = browser_inspector.filter_suspicious_sites(path_to_root, utilities.date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), utilities.date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH), SUSPICIOUS_SITES)
+    
+    print(sus)
+
+    #browser_data = browser_inspector.get_history_data(path_to_root, utilities.date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), utilities.date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH))
+    #browser_data_json = browser_inspector.dump_json()
+    #print(browser_data_json)

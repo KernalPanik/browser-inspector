@@ -39,5 +39,21 @@ class BrowserInspector():
 
         return self.visit_infos
 
+    '''
+    Locates suspicious site visit information based on provided site names.
+    input: a list of sites in a form of domain names
+    '''
+    def filter_suspicious_sites(self, profile_root: str, start_timestamp: int, end_timestamp: int, susp_sites: []) -> []:
+        visit_infos: VisitInfo = self.get_history_data(profile_root, start_timestamp, end_timestamp)
+        suspicous_visits = []
+        for visit_info in visit_infos:
+            for site in susp_sites:
+                actual_url = visit_info.url.split("/")[2]
+                if site in actual_url:
+                    print(visit_info.as_dict)
+                    suspicous_visits.append(visit_info)
+
+        return suspicous_visits
+
     def dump_json(self):
             return json.dumps(self.visit_infos, indent=4, cls=HistoryEncoder)
