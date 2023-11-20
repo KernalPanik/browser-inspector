@@ -1,6 +1,5 @@
 from analyzer import Analyzer
-from config import PATH_TO_BROWSER
-from browser_inspector import get_hisotry_data
+from config import PATH_TO_BROWSER, START_DATE, END_DATE
 from pdf_engine import *
 from ploter import Ploter
 
