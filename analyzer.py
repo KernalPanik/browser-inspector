@@ -53,7 +53,11 @@ class Analyzer:
         return df
 
     def prep_data_for_time_spent(self, visited_url: pd.DataFrame, visit: pd.DataFrame) -> pd.DataFrame:
-        
+        '''
+            New columnm with data is "time_spent"
+        '''
+
+
         unique_domains = visited_url["domain"].unique()
 
         inter_df = visited_url[["id", "url", "domain"]]
@@ -69,7 +73,10 @@ class Analyzer:
         return preped_df
 
     def prep_data_for_visits(self, visited_url: pd.DataFrame) -> float:
-        
+        '''
+            New columnm with data is "visit_count"        
+        '''
+       
         unique_domains = visited_url["domain"].unique()
 
         inter_df = visited_url[["id", "url", "domain", "visit_count"]]
@@ -83,7 +90,8 @@ class Analyzer:
 
     def prep_data_for_avarage_time_spent(self, visited_url: pd.DataFrame, visit: pd.DataFrame) -> pd.DataFrame:
         '''
-            Window in considered to be time spent in one url
+            Window in considered to be time spent in one url.
+            New columnm with data is "avarage_time_spent"
         '''
         unique_domains = visited_url["domain"].unique()
 
@@ -100,7 +108,9 @@ class Analyzer:
         return preped_df
     
     def pred_data_for_to_ip(self, visited_url: pd.DataFrame) -> pd.DataFrame:
-
+        '''
+            New columnm with data is "visit_count"
+        '''
         inter_df = visited_url[["id", "url", "domain", "visit_count"]]
 
         preped_df = pd.DataFrame()
@@ -145,3 +155,19 @@ class Analyzer:
             return True
         else:
             return False
+        
+    def group_to_top(self, top_of: int, data: pd.DataFrame, column_to_order: str) -> pd.DataFrame:
+        tmp_df = pd.DataFrame()
+
+        # top values
+        tmp_df = data.nlargest(top_of, column_to_order)
+
+        # grouping other values under label "other"
+        data = data.sort_values(by=column_to_order, ascending=False).tail(len(data) - top_of)
+
+        sum = data[column_to_order].sum()
+
+        new_row = pd.DataFrame([["Other", data[column_to_order].sum()]], columns=tmp_df.columns)
+        tmp_df = pd.concat([tmp_df, new_row], ignore_index=True)
+
+        return tmp_df
