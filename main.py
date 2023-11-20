@@ -1,11 +1,13 @@
 from analyzer import Analyzer
+from browser_inspector import BrowserInspector
 from config import PATH_TO_BROWSER, START_DATE, END_DATE
 from pdf_engine import *
 from ploter import Ploter
 
 if __name__ == "__main__":
     path_to_root = PATH_TO_BROWSER
-    browser_data = get_hisotry_data(path_to_root)
+    bi = BrowserInspector()
+    browser_data = bi.get_history_data(path_to_root, START_DATE, END_DATE)
 
     analyzer = Analyzer(browser_data)
     # analyzer.analyze_history()
