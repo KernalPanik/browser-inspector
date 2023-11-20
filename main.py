@@ -11,8 +11,8 @@ if __name__ == "__main__":
     analyzer = Analyzer(browser_data)
     # analyzer.analyze_history()
 
-    ploter = Ploter()
-    ploter.plot_column(analyzer.prep_data_for_time_spent(analyzer.visited_url, analyzer.visits), "Time spent")
+    ploter = Ploter(analyzer)
+    ploter.plot("Awensome plots")
 
     # Some testing of PDF engine, delete later
     # md = pdf_start_markdown("testmd.md")

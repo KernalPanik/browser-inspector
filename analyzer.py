@@ -72,7 +72,7 @@ class Analyzer:
 
         return preped_df
 
-    def prep_data_for_visits(self, visited_url: pd.DataFrame) -> float:
+    def prep_data_for_visits(self, visited_url: pd.DataFrame) -> pd.DataFrame:
         '''
             New columnm with data is "visit_count"        
         '''
