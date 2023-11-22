@@ -2,7 +2,7 @@ import os
 import json
 
 from utilities import HistoryEncoder
-from models import VisitInfo
+from models import VisitInfo, Visit
 
 class BrowserInspector():
     def __init__(self) -> None:
@@ -54,6 +54,37 @@ class BrowserInspector():
                     suspicous_visits.append(visit_info)
 
         return suspicous_visits
+
+    def _extract_url_from_visit(self, id: int) -> str:
+        for v in self.urls:
+            if (v.id == id):
+                return v.url
+
+    # Finds relevant from_visit entry
+    # returns next visit ID and URL
+    def _find_next_visit(self, visit_id: int) -> (int, str):
+        for v in self.visits:
+            if (visit_id == v.from_visit):
+                    return -1, "Unknown"
+            if v.id == visit_id:
+                return v.from_visit, self._extract_url_from_visit(v.url)
+
+        return -1, "Unknown"
+    
+    def build_sus_link_hierarchy(self, sus_visit_info: VisitInfo) -> []:
+        related_visits = []
+        for visit in sus_visit_info.visits:
+            # For each visit in given visit info, iterate over known visits, 
+            # and find related visits to form a sequence of redirects
+            #print("visit id: {}, from visit {}".format(visit.id, visit.from_visit))
+            vip = visit.from_visit
+            related_visits.append(self._extract_url_from_visit(visit.url))
+            while vip != -1:
+                vip, url = self._find_next_visit(vip)
+                related_visits.append(url)
+                #print("linked from {}".format(vip))
+
+        return related_visits
 
     def dump_json(self):
             return json.dumps(self.visit_infos, indent=4, cls=HistoryEncoder)

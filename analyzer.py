@@ -22,4 +22,3 @@ class Analyzer:
         print(df[["id", 'url', 'title']])
 
         df.info()
-    

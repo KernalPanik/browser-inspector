@@ -28,9 +28,13 @@ if __name__ == "__main__":
     path_to_root = PATH_TO_BROWSER
     browser_inspector = ChromiumInspector()
     sus = browser_inspector.filter_suspicious_sites(path_to_root, utilities.date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), utilities.date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH), SUSPICIOUS_SITES)
-    
-    print(sus)
-
+    #print(sus)
+    i = 0;
+    for vi in sus:
+        sus_her = browser_inspector.build_sus_link_hierarchy(vi)
+        #print(sus_her)
+        plot_node_dependencies(sus_her, "rendr{}.png".format(i))
+        i += 1
     #browser_data = browser_inspector.get_history_data(path_to_root, utilities.date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), utilities.date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH))
     #browser_data_json = browser_inspector.dump_json()
     #print(browser_data_json)

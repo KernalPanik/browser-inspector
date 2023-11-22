@@ -6,4 +6,4 @@ PATH_TO_BROWSER = "/Users/<USER>/Library/Application Support/Google/Chrome"
 START_DATE = "none" # none if want whatever date # "2023-11-03"
 END_DATE = "none" #"2023-11-04"
 
-SUSPICIOUS_SITES = ["youtube"]
+SUSPICIOUS_SITES = ["telegraph"]

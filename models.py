@@ -4,7 +4,7 @@ class Visit:
         self.url = url
         self.visit_time = visit_time
         self.visit_duration = visit_duration
-        self.from_visit = from_visit
+        self.from_visit = from_visit # Does from_visit correspond with one of the previously existed visits?
 
     def as_dict(self):
         return {'id': self.id, 'url': self.url, 'visit_time': self.visit_time, 'visit_duration': self.visit_duration, 'from_visit':self.from_visit}
