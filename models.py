@@ -18,6 +18,10 @@ class VisitedUrl:
         self.typed_count = typed_count
         self.last_visit_time = last_visit_time
 
+    def as_dict(self):
+        return {"id": self.id, "url": self.url, "title": self.title, "visit_count": self.visit_count, 
+                "typed_count": self.typed_count, "last_visit_time": self.last_visit_time}
+
 class VisitInfo:
     def __init__(self, visitedUrl: VisitedUrl) -> None:
         self.id = visitedUrl.id

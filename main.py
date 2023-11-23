@@ -1,10 +1,9 @@
 from analyzer import Analyzer
 from config import PATH_TO_BROWSER, START_DATE, END_DATE, SUSPICIOUS_SITES
+from browser_inspector import BrowserInspector
+from config import PATH_TO_BROWSER, START_DATE, END_DATE
 from pdf_engine import *
-from utilities import *
-from adaptors.chromium_inspector import ChromiumInspector
-
-import utilities
+from ploter import Ploter
 
 # Since we are too lazy to have proper tests, let's have simple "helpers" -- a functions which should do one thing like generate pdf
 # If the action gets completed and we can verify it, then this test considered as 'passed'
@@ -30,10 +29,22 @@ def suspicious_link_tree_generation_test_helper() -> None:
         i += 1
 
 if __name__ == "__main__":
-    #path_to_root = PATH_TO_BROWSER
-    #browser_data = get_history_data(path_to_root)
+    path_to_root = PATH_TO_BROWSER
+    bi = BrowserInspector()
+    browser_data = bi.get_history_data(path_to_root, START_DATE, END_DATE)
 
-    # print(browser_data)
+    analyzer = Analyzer(browser_data)
+    # analyzer.analyze_history()
 
-    #analyzer = Analyzer(browser_data)
-    #analyzer.analyze_history()
+    ploter = Ploter(analyzer)
+    ploter.plot("Awensome plots")
+
+    # Some testing of PDF engine, delete later
+    # md = pdf_start_markdown("testmd.md")
+    # pdf_append_large_header(md, "Hello world")
+    # pdf_append_paragraph(md, "Kind of Lorem Ipsum")
+    # pdf_append_paragraph(md, "paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright")
+    # pdf_append_small_header(md, "A bit of a smaller header")
+    # pdf_append_image(md, "test image", "cat.png", "test image", 40, 40)
+    # pdf_close_markdown(md)
+    # pandoc_call("testmd.md", "test-report.pdf", True)
