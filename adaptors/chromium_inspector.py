@@ -51,6 +51,9 @@ class ChromiumInspector(BrowserInspector):
 
     def get_history_data(self, profile_root, start_timestamp: int, end_timestamp: int):
         return super().get_history_data(profile_root, start_timestamp, end_timestamp)
-    
+
+    def filter_suspicious_sites(self, profile_root: str, start_timestamp: int, end_timestamp: int, susp_sites: []) -> []:
+        return super().filter_suspicious_sites(profile_root, start_timestamp, end_timestamp, susp_sites)
+
     def dump_json(self):
         return super().dump_json()

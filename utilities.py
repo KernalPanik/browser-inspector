@@ -1,5 +1,6 @@
 from json import JSONEncoder
 from enum import Enum
+import pydot
 
 import datetime
 
@@ -23,11 +24,15 @@ Converts given date into POSIX timestamp in seconds, or into Win32 (LDAP) format
 '''
 def date_to_epoch(date_string: str, time_epoch_format: TimeEpochFormat) -> int:
     epoch = 0
+
+    if (date_string == 'none'):
+        return epoch;
+
     if (time_epoch_format == TimeEpochFormat.UNIX_EPOCH):
         epoch = int(datetime.datetime.strptime(date_string, "%Y-%m-%d").timestamp())
     elif (time_epoch_format == TimeEpochFormat.ISO_8601_EPOCH):
         unix_epoch_microsecs_frac = int(datetime.datetime.strptime(date_string, "%Y-%m-%d").timestamp()) * 1000 * 1000 * 10 # Unix time epoch expressed in 0,1 microsec precision
-        base_unix_timestamp_as_ldap = 116444736000000000
+        base_unix_timestamp_as_ldap = 116444736000000000 # ...
         epoch = int((base_unix_timestamp_as_ldap + unix_epoch_microsecs_frac))
     return epoch
 
@@ -52,3 +57,19 @@ def form_date_filter_query(visit_time_columnn_name: str, start_timestamp: int, e
             where_filter = " WHERE {} <= {}".format(visit_time_columnn_name, str(check_end_timestamp))
     
     return where_filter
+
+# Render the dependency tree based on given array of nodes, sorted by the dependency between nodes
+# node 0 is the root, node 1 depends on node 0 etc.
+def plot_node_dependencies(nodes: [], title: str):
+    stringified_graph = ""
+    dot_string = "graph link_dependency_tree {\n"
+    i = 0
+    for node in nodes[::-1]:
+        if (i != 0):
+            stringified_graph += " -> \"{}\"".format(node)
+        else:
+            stringified_graph += "\"{}\"".format(node)
+        i += 1
+    dot_string += stringified_graph + "\n}"
+    graphs = pydot.graph_from_dot_data(dot_string)
+    graphs[0].write_png(title)
