@@ -6,25 +6,19 @@ from adaptors.chromium_inspector import ChromiumInspector
 
 import utilities
 
-if __name__ == "__main__":
-    #path_to_root = PATH_TO_BROWSER
-    #browser_data = get_history_data(path_to_root)
+# Since we are too lazy to have proper tests, let's have simple "helpers" -- a functions which should do one thing like generate pdf
+# If the action gets completed and we can verify it, then this test considered as 'passed'
+def pdf_generation_test_helper() -> None:
+    md = pdf_start_markdown("testmd.md")
+    pdf_append_large_header(md, "Hello world")
+    pdf_append_paragraph(md, "Kind of Lorem Ipsum")
+    pdf_append_paragraph(md, "paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright")
+    pdf_append_small_header(md, "A bit of a smaller header")
+    pdf_append_image(md, "test image", "cat.png", "test image", 40, 40)
+    pdf_close_markdown(md)
+    pandoc_call("testmd.md", "test-report.pdf", True)
 
-    # print(browser_data)
-
-    #analyzer = Analyzer(browser_data)
-    #analyzer.analyze_history()
-
-    # Some testing of PDF engine, delete later
-    #md = pdf_start_markdown("testmd.md")
-    #pdf_append_large_header(md, "Hello world")
-    #pdf_append_paragraph(md, "Kind of Lorem Ipsum")
-    #pdf_append_paragraph(md, "paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright paragraph which should be quite large, probably loaded from another file, but for testing it's alright")
-    #pdf_append_small_header(md, "A bit of a smaller header")
-    #pdf_append_image(md, "test image", "cat.png", "test image", 40, 40)
-    #pdf_close_markdown(md)
-    #pandoc_call("testmd.md", "test-report.pdf", True)
-
+def suspicious_link_tree_generation_test_helper() -> None:
     path_to_root = PATH_TO_BROWSER
     browser_inspector = ChromiumInspector()
     sus = browser_inspector.filter_suspicious_sites(path_to_root, utilities.date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), utilities.date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH), SUSPICIOUS_SITES)
@@ -34,3 +28,12 @@ if __name__ == "__main__":
         sus_her = browser_inspector.build_sus_link_hierarchy(vi)
         plot_node_dependencies(sus_her, "rendr{}.png".format(i))
         i += 1
+
+if __name__ == "__main__":
+    #path_to_root = PATH_TO_BROWSER
+    #browser_data = get_history_data(path_to_root)
+
+    # print(browser_data)
+
+    #analyzer = Analyzer(browser_data)
+    #analyzer.analyze_history()
