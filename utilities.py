@@ -70,10 +70,6 @@ def plot_node_dependencies(nodes: [], title: str):
         else:
             stringified_graph += "\"{}\"".format(node)
         i += 1
-    #print(stringified_graph)
     dot_string += stringified_graph + "\n}"
-    print(dot_string)
     graphs = pydot.graph_from_dot_data(dot_string)
-    print(graphs[0])
     graphs[0].write_png(title)
-    #graph = graphs[0]
