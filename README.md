@@ -14,6 +14,8 @@ This script expects a path to a browser profile root directory. In Chromium brow
 
 This script is expected to work with any Chromium based browser, tested with Brave and Chrome browsers.
 
+Tool is configured using `config.py` file. Please refer to it for configuration options.
+
 ## Browser inspector module 
 
 Parses Browser history data into computer readable JSON file containing URL and relevant visit info. This JSON file can be used for further analysis outside of this tool. Data collected using `get_history_data` or `filter_suspicious_sites` functions is later used to generate graphs depicting suspicious visit trees.
