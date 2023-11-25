@@ -42,8 +42,7 @@ Creates a WHERE search clause which filters out entries based on certain date co
 def form_date_filter_query(visit_time_columnn_name: str, start_timestamp: int, end_timestamp: int, time_epoch_unit: TimeEpochUnit) -> str:
     where_filter = ""
 
-    # TODO: (Luke) For now work with chromium timestamps, ignore time_epoch_unit...
-    # Chromium stores timestamps as microseconds, while proper conversion to LDAP format is 10x from that.
+    # Chromium stores timestamps as microseconds, while proper conversion to LDAP (or Win32, whatever) format is 10x from that.
     check_start_timestamp = start_timestamp / 10 #* 1000 ** time_epoch_unit.value
     check_end_timestamp = end_timestamp / 10 #* 1000 ** time_epoch_unit.value
 

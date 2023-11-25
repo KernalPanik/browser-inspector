@@ -8,4 +8,5 @@ PATH_TO_BROWSER = "{}/Library/Application Support/Google/Chrome".format(Path.hom
 START_DATE = "none" # none if want whatever date # "2023-11-03"
 END_DATE = "none" #"2023-11-04"
 
-SUSPICIOUS_SITES = ["telegraph"]
+SUSPICIOUS_SITES = []
+SUSPICIOUS_KEYWORDS = [] # Checks for suspicious words in website title
