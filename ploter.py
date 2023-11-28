@@ -17,17 +17,22 @@ class Ploter:
         visits = self.analyzer.visits
 
         time_spent_data = self.analyzer.prep_data_for_time_spent(visited_url, visits)
+        time_spent_data = self.analyzer.group_to_top(4, time_spent_data, "time_spent")
+
         visits_data = self.analyzer.prep_data_for_visits(visited_url)
-        average_time_spent_data = self.analyzer.prep_data_for_average_time_spent(visited_url, visits)
+        visits_data = self.analyzer.group_to_top(4, visits_data, "visit_count")
 
-        return time_spent_data, visits_data, average_time_spent_data
+        avarage_time_spent_data = self.analyzer.prep_data_for_average_time_spent(visited_url, visits)
+        avarage_time_spent_data = self.analyzer.group_to_top(4, avarage_time_spent_data, "avarage_time_spent")
+
+        return time_spent_data, visits_data, avarage_time_spent_data
 
 
-    def plot(self, plot_path: str):
+    def plot(self, plot_name: str):
 
         fig, (ax1, ax2, ax3) = plt.subplots(1,3, figsize = (12 , 10))
 
-        time_spent_data, visits_data, average_time_spent_data = self.get_data_for_plots()
+        time_spent_data, visits_data, avarage_time_spent_data = self.get_data_for_plots()
 
         y = time_spent_data.time_spent.values
         x = time_spent_data.domain.values
@@ -52,18 +57,18 @@ class Ploter:
         ax2.set_xticks(ticks = np.arange(len(x)), labels = x, rotation="vertical")
 
         # Avarage time spent diagram
-        y = average_time_spent_data.avarage_time_spent.values
-        x = average_time_spent_data.domain.values
+        y = avarage_time_spent_data.avarage_time_spent.values
+        x = avarage_time_spent_data.domain.values
 
         ax3.bar(x, y)
 
-        ax3.set_ylabel('Average time')
-        ax3.set_title('Average time spent')
+        ax3.set_ylabel('Avarage time')
+        ax3.set_title('Avarage time spent')
 
         ax3.set_xticks(ticks = np.arange(len(x)), labels = x, rotation="vertical")
 
         plt.subplots_adjust(bottom=0.24)
 
-        plt.savefig("{}.png".format(plot_path))
+        plt.savefig("diagrams.png")
 
         # plt.show()
