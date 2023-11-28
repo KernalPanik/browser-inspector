@@ -2,7 +2,7 @@ from pathlib import Path
 
 # Files paths differ for users. Descriptions possible file paths for different OS can be found in README file
 # Uncomment the configuration based on your system:
-#PATH_TO_BROWSER = "C:/Users/<USER>/AppData/Local/Google/Chrome/User Data" # Windows
+#PATH_TO_BROWSER = "{}/AppData/Local/Google/Chrome/User Data".format(Path.home()) # Windows
 PATH_TO_BROWSER = "{}/Library/Application Support/Google/Chrome".format(Path.home()) # macOS
 
 # Date format YYYY-MM-DD as a string

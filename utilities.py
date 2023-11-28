@@ -59,7 +59,7 @@ def form_date_filter_query(visit_time_columnn_name: str, start_timestamp: int, e
 
 # Render the dependency tree based on given array of nodes, sorted by the dependency between nodes
 # node 0 is the root, node 1 depends on node 0 etc.
-def plot_node_dependencies(nodes: [], title: str):
+def plot_node_dependencies(nodes: [], path: str):
     stringified_graph = ""
     dot_string = "graph link_dependency_tree {\n"
     i = 0
@@ -71,4 +71,4 @@ def plot_node_dependencies(nodes: [], title: str):
         i += 1
     dot_string += stringified_graph + "\n}"
     graphs = pydot.graph_from_dot_data(dot_string)
-    graphs[0].write_png(title)
+    graphs[0].write_png(path + ".png")

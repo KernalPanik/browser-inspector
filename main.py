@@ -6,6 +6,7 @@ from config import PATH_TO_BROWSER, START_DATE, END_DATE
 from pdf_engine import *
 from ploter import Ploter
 from utilities import *
+from reporter import Reporter
 
 # Since we are too lazy to have proper tests, let's have simple "helpers" -- a functions which should do one thing like generate pdf
 # If the action gets completed and we can verify it, then this test considered as 'passed'
@@ -54,4 +55,7 @@ if __name__ == "__main__":
     ploter = Ploter(analyzer)
     ploter.plot("Awensome plots")"""
 
-    suspicious_link_tree_generation_based_on_title_test_helper()
+    inspector = ChromiumInspector()
+    history = inspector.get_history_data(PATH_TO_BROWSER, date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH))
+    reporter = Reporter("test-report", history, inspector)
+    reporter.build_report()

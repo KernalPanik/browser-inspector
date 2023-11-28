@@ -88,7 +88,7 @@ class Analyzer:
         return preped_df
         
 
-    def prep_data_for_avarage_time_spent(self, visited_url: pd.DataFrame, visit: pd.DataFrame) -> pd.DataFrame:
+    def prep_data_for_average_time_spent(self, visited_url: pd.DataFrame, visit: pd.DataFrame) -> pd.DataFrame:
         '''
             Window in considered to be time spent in one url.
             New columnm with data is "avarage_time_spent"

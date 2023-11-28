@@ -1,5 +1,6 @@
 import os
 import json
+from config import SUSPICIOUS_KEYWORDS, SUSPICIOUS_SITES
 
 from utilities import HistoryEncoder
 from models import VisitInfo, Visit
@@ -18,16 +19,16 @@ class BrowserInspector():
 
     def _map_visits_to_urls(self) -> None:
         pass
-
-    def get_history_data(self, profile_root: str, start_timestamp: int, end_timestamp: int) -> []:
-        '''
+    
+    '''
         Function that gets browser history data such as visited URL and time of visits.
         Arguments:
         path_to_root: str - a path to browser profile root folder.
 
         Return:
         list - of URL visited as a VisitedUrl object
-        '''
+    '''
+    def get_history_data(self, profile_root: str, start_timestamp: int, end_timestamp: int) -> []:
         browser_profile_root = os.path.join(profile_root)
         if (not os.path.isdir(browser_profile_root)):
             print("Directory at {} seem to not exist.".format(browser_profile_root))
@@ -43,11 +44,10 @@ class BrowserInspector():
     Locates suspicious site visit information based on provided site names, looking at the website url (site)
     input: a list of sites in a form of domain names
     '''
-    def filter_suspicious_sites_by_url(self, profile_root: str, start_timestamp: int, end_timestamp: int, susp_sites: []) -> []:
-        visit_infos: VisitInfo = self.get_history_data(profile_root, start_timestamp, end_timestamp)
+    def filter_suspicious_sites_by_url(self) -> []:
         suspicous_visits = []
-        for visit_info in visit_infos:
-            for site in susp_sites:
+        for visit_info in self.visit_infos:
+            for site in SUSPICIOUS_SITES:
                 actual_url = visit_info.url.split("/")[2]
                 if site in actual_url:
                     # print(visit_info.as_dict)
@@ -59,13 +59,11 @@ class BrowserInspector():
     Locates suspicious site visit information based on provided site names, looking at the website title
     input: a list of sites in a form of domain names
     '''
-    def filter_suspicious_sites_by_title(self, profile_root: str, start_timestamp: int, end_timestamp: int, susp_keywords: []) -> []:
-        visit_infos: VisitInfo = self.get_history_data(profile_root, start_timestamp, end_timestamp)
+    def filter_suspicious_sites_by_title(self) -> []:
         suspicous_visits = []
-        for visit_info in visit_infos:
-            for site in susp_keywords:
+        for visit_info in self.visit_infos:
+            for site in SUSPICIOUS_KEYWORDS:
                 if site in visit_info.title.lower():
-                    print(visit_info.as_dict)
                     suspicous_visits.append(visit_info)
 
         return suspicous_visits

@@ -18,16 +18,16 @@ class Ploter:
 
         time_spent_data = self.analyzer.prep_data_for_time_spent(visited_url, visits)
         visits_data = self.analyzer.prep_data_for_visits(visited_url)
-        avarage_time_spent_data = self.analyzer.prep_data_for_avarage_time_spent(visited_url, visits)
+        average_time_spent_data = self.analyzer.prep_data_for_average_time_spent(visited_url, visits)
 
-        return time_spent_data, visits_data, avarage_time_spent_data
+        return time_spent_data, visits_data, average_time_spent_data
 
 
-    def plot(self, plot_name: str):
+    def plot(self, plot_path: str):
 
         fig, (ax1, ax2, ax3) = plt.subplots(1,3, figsize = (12 , 10))
 
-        time_spent_data, visits_data, avarage_time_spent_data = self.get_data_for_plots()
+        time_spent_data, visits_data, average_time_spent_data = self.get_data_for_plots()
 
         y = time_spent_data.time_spent.values
         x = time_spent_data.domain.values
@@ -52,18 +52,18 @@ class Ploter:
         ax2.set_xticks(ticks = np.arange(len(x)), labels = x, rotation="vertical")
 
         # Avarage time spent diagram
-        y = avarage_time_spent_data.avarage_time_spent.values
-        x = avarage_time_spent_data.domain.values
+        y = average_time_spent_data.avarage_time_spent.values
+        x = average_time_spent_data.domain.values
 
         ax3.bar(x, y)
 
-        ax3.set_ylabel('Avarage time')
-        ax3.set_title('Avarage time spent')
+        ax3.set_ylabel('Average time')
+        ax3.set_title('Average time spent')
 
         ax3.set_xticks(ticks = np.arange(len(x)), labels = x, rotation="vertical")
 
         plt.subplots_adjust(bottom=0.24)
 
-        plt.savefig("diagrams.png")
+        plt.savefig("{}.png".format(plot_path))
 
         # plt.show()
