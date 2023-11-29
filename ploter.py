@@ -56,7 +56,7 @@ class Ploter:
 
         ax2.set_xticks(ticks = np.arange(len(x)), labels = x, rotation="vertical")
 
-        # Avarage time spent diagram
+        # Average time spent diagram
         y = average_time_spent_data.average_time_spent.values
         x = average_time_spent_data.domain.values
 

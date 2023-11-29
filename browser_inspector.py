@@ -3,13 +3,13 @@ import json
 from config import SUSPICIOUS_KEYWORDS, SUSPICIOUS_SITES
 
 from utilities import HistoryEncoder
-from models import VisitInfo, Visit
+from models import VisitInfo, Visit, VisitedUrl
 
 class BrowserInspector():
     def __init__(self) -> None:
-        self.visit_infos = []
-        self.visits = []
-        self.urls = []
+        self.visit_infos = [VisitInfo]
+        self.visits = [Visit]
+        self.urls = [VisitedUrl]
         self.direct_ip_calls = []
 
     def _collect_visits(self, profile_root: str, start_timestamp: int, end_timestamp: int) -> None:
@@ -51,9 +51,6 @@ class BrowserInspector():
             yes = False
 
         return yes
-
-    def get_info_on_ip_calls(self) -> str:
-        pass
 
     '''
     Locates suspicious site visit information based on provided site names, looking at the website url (site)
