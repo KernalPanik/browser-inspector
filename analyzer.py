@@ -91,7 +91,7 @@ class Analyzer:
     def prep_data_for_average_time_spent(self, visited_url: pd.DataFrame, visit: pd.DataFrame) -> pd.DataFrame:
         '''
             Window in considered to be time spent in one url.
-            New columnm with data is "avarage_time_spent"
+            New columnm with data is "average_time_spent"
         '''
         unique_domains = visited_url["domain"].unique()
 
@@ -101,9 +101,9 @@ class Analyzer:
         
         preped_df = pd.DataFrame(data=unique_domains, columns=["domain"])
         
-        preped_df["avarage_time_spent"] = preped_df.domain.apply(lambda x: inter_df[inter_df.domain == x]["time_spent"].mean())
+        preped_df["average_time_spent"] = preped_df.domain.apply(lambda x: inter_df[inter_df.domain == x]["time_spent"].mean())
 
-        preped_df["avarage_time_spent"] = preped_df.avarage_time_spent.apply(lambda x: round(x/1000000, 2))
+        preped_df["average_time_spent"] = preped_df.average_time_spent.apply(lambda x: round(x/1000000, 2))
 
         return preped_df
     

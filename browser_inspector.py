@@ -10,6 +10,7 @@ class BrowserInspector():
         self.visit_infos = []
         self.visits = []
         self.urls = []
+        self.direct_ip_calls = []
 
     def _collect_visits(self, profile_root: str, start_timestamp: int, end_timestamp: int) -> None:
         pass
@@ -40,6 +41,20 @@ class BrowserInspector():
 
         return self.visit_infos
 
+    def _looks_like_ipv4_address(self, url: str) -> bool:
+        yes = True
+        try:
+            for entry in url.split('.'):
+                if int(entry) < 0 and int(entry) > 256:
+                    yes = False
+        except:
+            yes = False
+
+        return yes
+
+    def get_info_on_ip_calls(self) -> str:
+        pass
+
     '''
     Locates suspicious site visit information based on provided site names, looking at the website url (site)
     input: a list of sites in a form of domain names
@@ -52,6 +67,8 @@ class BrowserInspector():
                 if site in actual_url:
                     # print(visit_info.as_dict)
                     suspicous_visits.append(visit_info)
+                elif self._looks_like_ipv4_address(site):
+                    self.direct_ip_calls.append(visit_info)
 
         return suspicous_visits
 
