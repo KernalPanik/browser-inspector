@@ -64,8 +64,8 @@ class BrowserInspector():
                 if site in actual_url:
                     # print(visit_info.as_dict)
                     suspicous_visits.append(visit_info)
-                elif self._looks_like_ipv4_address(site):
-                    self.direct_ip_calls.append(visit_info)
+                elif self._looks_like_ipv4_address(actual_url):
+                    self.direct_ip_calls.append(visit_info.url)
 
         return suspicous_visits
 

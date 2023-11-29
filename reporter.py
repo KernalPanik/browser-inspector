@@ -42,11 +42,26 @@ class Reporter:
         diagrams_path = os.path.join(self.report_folder, "diagrams.png")
         self.plotter.plot(diagrams_path)
         return diagrams_path
+    
+    def _get_graphs(self, hierarchy_list: [], graph_file_name: str) -> []:
+        hierarchies = []
+        for tbh in hierarchy_list:
+            hierarchies.append(self.browser_inspector.build_sus_link_hierarchy(tbh))
+
+        index = 0
+        graph_paths = []
+        for tbh in hierarchies:
+            path = os.path.join(self.report_folder, "{}_{}".format(graph_file_name, index))
+            utils.plot_node_dependencies(tbh, path)
+            graph_paths.append(path + ".png")
+            index += 1
+
+        return graph_paths
 
     def _prepare_sus_visits_graph(self) -> (str, str, [str]):
         sus_visits_header = "Suspicious visit graph"
         sus_visit_paragraph = "This section provides insights into the browsing 'tree', showing what led to a suspicious site visited."
-        title_based_hierarchy_list = self.browser_inspector.filter_suspicious_sites_by_title()
+        """title_based_hierarchy_list = self.browser_inspector.filter_suspicious_sites_by_title()
         title_based_hierarchies = []
         for tbh in title_based_hierarchy_list:
             title_based_hierarchies.append(self.browser_inspector.build_sus_link_hierarchy(tbh))
@@ -59,14 +74,18 @@ class Reporter:
             graph_paths.append(path + ".png")
             index += 1
 
-        return graph_paths
+        return graph_paths"""
+
+        title_graphs = self._get_graphs(self.browser_inspector.filter_suspicious_sites_by_title(), "sus_titles")
+        url_graphs = self._get_graphs(self.browser_inspector.filter_suspicious_sites_by_url(), "sus_urls")
+        return title_graphs + url_graphs
 
     def _prepare_ip_call_report(self) -> (str, str):
         header = "Suspicious calls to IP addresses"
         no_host_visits_str = ""
         if len(self.browser_inspector.direct_ip_calls) > 0:
             for ip in self.browser_inspector.direct_ip_calls:
-                no_host_visits_str = no_host_visits_str + str(ip) + "\n"
+                no_host_visits_str = no_host_visits_str + str(ip) + "\n\n"
 
         return header, no_host_visits_str
 
@@ -124,6 +143,7 @@ class Reporter:
             index = 1
             for graph in graphs:
                 pdf_engine.pdf_append_image(handler, graph, title="Suspicious visits graph-{}".format(index))
+                pdf_engine.pdf_append_paragraph(handler, "\n\n")
                 index += 1
 
         pdf_engine.pdf_close_markdown(handler)
