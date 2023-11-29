@@ -107,4 +107,7 @@ class Reporter:
         graphs = self._prepare_sus_visits_graph()
         ip_report_header, ip_report_paragraph = self._prepare_ip_call_report() # if paragraph returned is empty, do not use
         large_header, paragraph=  self._prepare_basic_information_section()
+        pdf_engine.pdf_start_markdown(self.report_document_path)
+        pdf_engine.pdf_append_large_header(large_header)
+        pdf_engine.pdf_append_paragraph(paragraph)
         return self.report_document_path
