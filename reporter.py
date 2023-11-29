@@ -19,20 +19,22 @@ class Reporter:
         self.browsing_history = browsing_history
         self.plotter = Ploter(Analyzer(browsing_history))
         self.browser_inspector = inspector
-        self.report_document_path = os.path.join(self.report_folder, report_name)
-
+        self.report_document_path = "" #os.path.join(self.report_folder, report_name)
+        self.final_report_path = os.path.join(self.report_folder, "report.pdf")
+        
+        # We're talking about intermim report, which is a markdown doc here:
+        if len(report_name.split('.')) > 0:
+            if report_name.split('.')[-1] == "md":
+                self.report_document_path = os.path.join(self.report_folder, report_name)
+            else:
+                self.report_document_path = os.path.join(self.report_folder, report_name+".md")
+        else:
+            self.report_document_path = os.path.join(self.report_folder, report_name+".md")
+        
         if (os.path.exists(self.report_folder)):
             print("path at {} already exists! will delete it".format(self.report_folder))
             shutil.rmtree(self.report_folder)
         os.mkdir(self.report_folder)
-
-        """
-        if len(report_name.split('.')) > 0 and report_name.split('.')[:-1] == "pdf":
-            if report_name.split('.')[:-1] == "pdf":
-                self.reportFileHandler = pdf_engine.pdf_start_markdown(self.report_document_path)
-            else:
-                self.reportFileHandler = pdf_engine.pdf_start_markdown(self.report_document_path)
-        """
 
     def _prepare_plots_to_report(self) -> (str, str, str):
         diagrams_header = "Search statistics"
@@ -52,9 +54,9 @@ class Reporter:
         index = 0
         graph_paths = []
         for tbh in title_based_hierarchies:
-            path = os.path.join(self.report_folder, "sus_sites_titles_{}.png")
+            path = os.path.join(self.report_folder, "sus_sites_titles_{}".format(index))
             utils.plot_node_dependencies(tbh, path)
-            graph_paths.append(path)
+            graph_paths.append(path + ".png")
             index += 1
 
         return graph_paths
@@ -75,39 +77,56 @@ class Reporter:
         end_date_entry = ""
 
         if START_DATE == "none":
-            start_date_entry = "There was no start of timeframe provided, information collected was from the first visit."
+            start_date_entry = "\n\nThere was no start of search timeframe provided, information collected was from the first visit.\n"
         else:
-            start_date_entry = "Start of timeframe was at {}".format(START_DATE)
+            start_date_entry = "Start of search timeframe was at {}".format(START_DATE)
         if END_DATE == "none":
-            end_date_entry = "There was no end of timeframe provided, information collected was until the last visit."
+            end_date_entry = "\n\nThere was no end of search timeframe provided, information collected was until the last visit.\n"
         else:
-            end_date_entry = "End of timeframe was at {}".format(END_DATE)
+            end_date_entry = "End of search timeframe was at {}".format(END_DATE)
 
-        time_frame_paragraph = "Browsing data was collected from this timeframe: {}. {}\n".format(start_date_entry, end_date_entry)
+        time_frame_paragraph = "{}. {}\n".format(start_date_entry, end_date_entry)
 
         sus_keywords_entry = ""
         if len(SUSPICIOUS_KEYWORDS) > 0:
-            sus_keywords_entry = "Was looking for visited website titles with such keywords: "
+            sus_keywords_entry = "\n\nWas looking for visited website titles with such keywords: "
             for keyword in SUSPICIOUS_KEYWORDS:
                 sus_keywords_entry = sus_keywords_entry + "{}; ".format(keyword)
             sus_keywords_entry = sus_keywords_entry + "\n"
 
         sus_sites_entry = ""
         if len(SUSPICIOUS_SITES) > 0:
-            sus_sites_entry = "Was looking for visited website titles with such keywords: "
+            sus_sites_entry = "\n\nWas looking for visited website titles with such keywords: "
             for keyword in SUSPICIOUS_SITES:
                 sus_sites_entry = sus_sites_entry + "{}; ".format(keyword)
             sus_sites_entry = sus_sites_entry + "\n"
 
-        paragraph = "The browsing history was collected from {}.\n {}\n {}\n {}\n".format(PATH_TO_BROWSER, time_frame_paragraph, sus_keywords_entry, sus_sites_entry)
+        paragraph = "The browsing history was collected from {}\n {} {} {}".format(PATH_TO_BROWSER, time_frame_paragraph, sus_keywords_entry, sus_sites_entry)
         return large_header, paragraph
 
     def build_report(self) -> str:
         diagrams = self._prepare_plots_to_report()
         graphs = self._prepare_sus_visits_graph()
         ip_report_header, ip_report_paragraph = self._prepare_ip_call_report() # if paragraph returned is empty, do not use
-        large_header, paragraph=  self._prepare_basic_information_section()
-        pdf_engine.pdf_start_markdown(self.report_document_path)
-        pdf_engine.pdf_append_large_header(large_header)
-        pdf_engine.pdf_append_paragraph(paragraph)
+        large_header, paragraph = self._prepare_basic_information_section()
+        handler = pdf_engine.pdf_start_markdown(self.report_document_path)
+        pdf_engine.pdf_append_large_header(handler, large_header)
+        pdf_engine.pdf_append_paragraph(handler, paragraph)
+        if ip_report_paragraph != "":
+            pdf_engine.pdf_append_small_header(handler, ip_report_header)
+            pdf_engine.pdf_append_paragraph(handler, ip_report_paragraph)
+        
+        pdf_engine.pdf_append_small_header(handler, "Usage Statistics")
+        pdf_engine.pdf_append_image(handler, diagrams, title="Usage Statisics")
+        pdf_engine.pdf_append_paragraph(handler, "\n\n")
+        if len(graphs) > 0:
+            pdf_engine.pdf_append_small_header(handler, "Suspicious Visit Information")
+            index = 1
+            for graph in graphs:
+                pdf_engine.pdf_append_image(handler, graph, title="Suspicious visits graph-{}".format(index))
+                index += 1
+
+        pdf_engine.pdf_close_markdown(handler)
+
+        pdf_engine.pandoc_call(self.report_document_path, self.final_report_path, False)
         return self.report_document_path

@@ -61,7 +61,7 @@ def form_date_filter_query(visit_time_columnn_name: str, start_timestamp: int, e
 # node 0 is the root, node 1 depends on node 0 etc.
 def plot_node_dependencies(nodes: [], path: str):
     stringified_graph = ""
-    dot_string = "graph link_dependency_tree {\n"
+    dot_string = "graph link_dependency_tree {\n graph [ dpi = 500 ];\n"
     i = 0
     for node in nodes[::-1]:
         if (i != 0):

@@ -10,7 +10,10 @@ import os
 
 # Call pandoc which should be installed on the system to generate a PDF
 def pandoc_call(test_markdown_path: str, output_file: str, delete_markdown: bool):
-    subprocess.run(["pandoc", "{}".format(test_markdown_path), "-o", "{}".format(output_file)])
+    command = "pandoc {} -o {}".format(test_markdown_path, output_file)
+    print(command)
+    stout = subprocess.run(["pandoc", test_markdown_path, "-o", output_file])
+    print(stout)
     if (delete_markdown):
         os.remove(test_markdown_path)
 
@@ -30,6 +33,6 @@ def pdf_append_small_header(markdown_file: io.TextIOWrapper, header_contents: st
 def pdf_append_paragraph(markdown_file: io.TextIOWrapper, paragraph_contents: str):
     markdown_file.write("{}\n\n".format(paragraph_contents))
 
-def pdf_append_image(markdown_file: io.TextIOWrapper, alt_text: str, image_path:str, title: str, width_percent, height_percent):
-    markdown_file.write("![{}]({} \"{}\")".format(alt_text, image_path, title, str(width_percent), str(height_percent)) + "{" + "width={}\% height={}%".format(width_percent, height_percent) + "}\n")
+def pdf_append_image(markdown_file: io.TextIOWrapper, image_path:str, alt_text = "image", title = "image", width_percent = 100, height_percent = 100):
+    markdown_file.write("![{}]({} \"{}\")".format(title, image_path, alt_text, str(width_percent), str(height_percent)) + "{" + "width={}\% height={}%".format(width_percent, height_percent) + "}\n")
 
