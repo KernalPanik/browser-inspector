@@ -25,7 +25,7 @@ def suspicious_link_tree_generation_based_on_site_test_helper() -> None:
     browser_inspector = ChromiumInspector()
     sus = browser_inspector.filter_suspicious_sites_by_url(path_to_root, date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH), SUSPICIOUS_SITES)
 
-    i = 0;
+    i = 0
     for vi in sus:
         sus_hier = browser_inspector.build_sus_link_hierarchy(vi)
         print(sus_hier)

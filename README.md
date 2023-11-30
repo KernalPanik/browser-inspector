@@ -4,6 +4,8 @@
 
 In order to run this tool, a set of tools need to be installed. Please refer to requirements.txt for pip packages, and use provided tool-installer scripts for external tools like Pandoc.
 
+For Pandoc to work properly, LaTeX engine which supports pdflatex, will be needed. For macOS we suggest mactex, and for windows -- MikTex
+
 ## Usage overview
 
 The only way to configure the tool is to use `config.py` file. Please set selected configurations as described in the comments. By tweaking the configuration, you can choose the timeframe of the browsing by using `START_DATE` and `END_DATE` entries. The keywords an inspector should look for are defined in `SUSPICIOUS_SITES` and `SUSPICIOUS_KEYWORDS` arrays. By default, Browser History Inspector considers any visit to a IP instead of regular hostname as suspicious activity. It can be disabled using `IGNORE_IP` flag.
