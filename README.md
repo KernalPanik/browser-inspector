@@ -2,9 +2,28 @@
 
 ## Prerequisites
 
+Required tools can be installed by using provided `tools-uploader` scripts.
+
 In order to run this tool, a set of tools need to be installed. Please refer to requirements.txt for pip packages, and use provided tool-installer scripts for external tools like Pandoc.
 
-For Pandoc to work properly, LaTeX engine which supports pdflatex, will be needed. For macOS we suggest mactex, and for windows -- MikTex
+```
+brew install pandoc
+choco install pandoc
+```
+
+For Pandoc to work properly, LaTeX engine which supports pdflatex, will be needed. For macOS we suggest mactex, and for windows -- MikTex.
+
+```
+brew install mactex
+choco install MikTex
+```
+
+Graph generation requires `dot` tool, which can be installed as a part of graphviz package:
+
+```
+brew install graphviz 
+conda install graphviz
+```
 
 ## Usage overview
 
