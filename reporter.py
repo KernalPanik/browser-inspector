@@ -7,6 +7,7 @@ import os
 import utilities as utils
 import shutil
 import pdf_engine
+import csv
 
 """
 The main report creation method of this Class will produce a report folder,
@@ -123,6 +124,30 @@ class Reporter:
         paragraph = "The browsing history was collected from {}\n {} {} {}".format(PATH_TO_BROWSER, time_frame_paragraph, sus_keywords_entry, sus_sites_entry)
         return large_header, paragraph
 
+    def _get_csv_data(self) -> str:
+        csv_columns = ['id', 'url', 'title', 'visit_count', 'typed_count', 'last_visit_time', 'visit']
+        sus_history_file_path = os.path.join(self.report_folder, "sus_history.csv")
+        sus_visit_file_path = os.path.join(self.report_folder, "sus_specific_visits.csv")
+        with open(sus_history_file_path, "w+") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(csv_columns)
+
+            with open(sus_visit_file_path, "a+") as susfile:
+                w = csv.writer(susfile)
+                w_csv_columns = ['id', 'url', 'visit_time', 'visit_duration', 'from_visit']
+                w.writerow(w_csv_columns)
+                for sus_visit in self.browser_inspector.filter_suspicious_sites_by_title():
+                    writer.writerow(sus_visit.as_data_entry())
+                    for v in sus_visit.visits:
+                        w.writerow(v.as_data_entry())
+
+                for sus_visit in self.browser_inspector.filter_suspicious_sites_by_url():
+                    writer.writerow(sus_visit.as_data_entry())
+                    for v in sus_visit.visits:
+                        w.writerow(v.as_data_entry())
+    
+        return sus_history_file_path, sus_visit_file_path
+
     def build_report(self) -> str:
         diagrams_header, diagrams_paragraph, diagrams = self._prepare_plots_to_report()
         graph_header, graph_paragraph, graphs = self._prepare_sus_visits_graph()
@@ -151,4 +176,6 @@ class Reporter:
         pdf_engine.pdf_close_markdown(handler)
 
         pdf_engine.pandoc_call(self.report_document_path, self.final_report_path, False)
+        csv_report, spec_report = self._get_csv_data()
+        print("Made csv reports at {} and {}".format(csv_report, spec_report))
         return self.report_document_path
