@@ -8,6 +8,9 @@ class Visit:
 
     def as_dict(self):
         return {'id': self.id, 'url': self.url, 'visit_time': self.visit_time, 'visit_duration': self.visit_duration, 'from_visit':self.from_visit}
+    
+    def as_data_entry(self):
+        return [str(self.id), str(self.url), str(self.visit_time), str(self.visit_duration), str(self.from_visit)]
 
 class VisitedUrl:
     def __init__(self, id, url, title, visit_count, typed_count, last_visit_time) -> None:
@@ -21,7 +24,7 @@ class VisitedUrl:
     def as_dict(self):
         return {"id": self.id, "url": self.url, "title": self.title, "visit_count": self.visit_count, 
                 "typed_count": self.typed_count, "last_visit_time": self.last_visit_time}
-
+    
 class VisitInfo:
     def __init__(self, visitedUrl: VisitedUrl) -> None:
         self.id = visitedUrl.id
@@ -35,3 +38,6 @@ class VisitInfo:
     def as_dict(self):
         return {'id': self.id, 'url': self.url, 'title': self.title, 'visit_count': self.visit_count,
                 'typed_count': self.typed_count, 'last_visit_time': self.last_visit_time, "visits": [x.as_dict() for x in self.visits]}
+    
+    def as_data_entry(self):
+        return [str(self.id), str(self.url), str(self.title), str(self.visit_count), str(self.typed_count), str(self.last_visit_time)]

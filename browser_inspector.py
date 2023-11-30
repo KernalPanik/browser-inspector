@@ -3,7 +3,7 @@ import json
 from config import SUSPICIOUS_KEYWORDS, SUSPICIOUS_SITES
 
 from utilities import HistoryEncoder
-from models import VisitInfo, Visit
+from models import VisitInfo, Visit, VisitedUrl
 
 class BrowserInspector():
     def __init__(self) -> None:
@@ -52,9 +52,6 @@ class BrowserInspector():
 
         return yes
 
-    def get_info_on_ip_calls(self) -> str:
-        pass
-
     '''
     Locates suspicious site visit information based on provided site names, looking at the website url (site)
     input: a list of sites in a form of domain names
@@ -62,13 +59,14 @@ class BrowserInspector():
     def filter_suspicious_sites_by_url(self) -> []:
         suspicous_visits = []
         for visit_info in self.visit_infos:
+            actual_url = visit_info.url.split("/")[2]
+            if self._looks_like_ipv4_address(actual_url):
+                self.direct_ip_calls.append(visit_info.url)
+                suspicous_visits.append(visit_info)
             for site in SUSPICIOUS_SITES:
-                actual_url = visit_info.url.split("/")[2]
                 if site in actual_url:
                     # print(visit_info.as_dict)
                     suspicous_visits.append(visit_info)
-                elif self._looks_like_ipv4_address(site):
-                    self.direct_ip_calls.append(visit_info)
 
         return suspicous_visits
 
@@ -101,6 +99,21 @@ class BrowserInspector():
 
         return -1, "Unknown"
     
+    def _add_visit_data_to_list(self, target_visit_list: [], data: ()) -> None:
+        first = ""
+        second = ""
+        if len(data[0]) > 50:
+            first = data[0][0:30]
+        else:
+            first = data[0]
+
+        if len(data[1]) > 50:
+            second = data[1][0:30]
+        else:
+            second = data[1]
+
+        target_visit_list.append((first, second))
+
     def build_sus_link_hierarchy(self, sus_visit_info: VisitInfo) -> []:
         related_visits = [()]
         for visit in sus_visit_info.visits:
@@ -109,10 +122,12 @@ class BrowserInspector():
             #print("visit id: {}, from visit {}".format(visit.id, visit.from_visit))
             vip = visit.from_visit
             start_url, start_title = self._extract_url_title_from_visit(visit.url)
-            related_visits.append((start_url, start_title))
+            self._add_visit_data_to_list(related_visits, (start_url, start_title))
+            #related_visits.append((start_url, start_title))
             while vip != -1:
                 vip, visit_data = self._find_next_visit(vip)
-                related_visits.append((visit_data[0], visit_data[1]))
+                self._add_visit_data_to_list(related_visits, (visit_data[0], visit_data[1]))
+                #related_visits.append((visit_data[0], visit_data[1]))
                 #print("linked from {}".format(vip))
 
         return related_visits

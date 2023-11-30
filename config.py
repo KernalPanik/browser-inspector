@@ -13,3 +13,4 @@ END_DATE = "none" #"2023-11-04"
 
 SUSPICIOUS_SITES = [] # Checks for suspicious urls or sites
 SUSPICIOUS_KEYWORDS = [] # Checks for suspicious words in website title
+IGNORE_IP = False # Set to True if you don't want to capture direct calls to IP addresses

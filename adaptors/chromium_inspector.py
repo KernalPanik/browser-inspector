@@ -15,7 +15,7 @@ class ChromiumInspector(BrowserInspector):
         con = sqlite3.connect(os.path.join(profile_root, "Default", "History"))
         cur = con.cursor()
         query = "SELECT id, url, visit_time, from_visit, visit_duration FROM visits {}".format(where_filter)
-        print("query is {}".format(query))
+        #print("query is {}".format(query))
         res = cur.execute(query).fetchall()
 
         visits = []
