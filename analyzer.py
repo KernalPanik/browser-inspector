@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 from io import StringIO
+import warnings
+from pandas.errors import SettingWithCopyWarning
 
 from models import VisitInfo
 
@@ -11,6 +13,7 @@ class Analyzer:
         self.df = self.to_dataframe()
         self.visited_url = self.get_visited_url(self.df)
         self.visits = self.get_visit(self.df)
+        warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 
     def analyze_history(self):
         '''
