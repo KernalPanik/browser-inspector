@@ -53,12 +53,12 @@ This module is mainly used for internal, purposes, however the most interesting 
 
 This module collects all the previous modules and uses them to generate every component which will later be turned into a PDF report. The basic usage of our tools is simple:
 
-`
+```
     inspector = ChromiumInspector()
     history = inspector.get_history_data(PATH_TO_BROWSER, date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH))
     reporter = Reporter("test-report", history, inspector)
     reporter.build_report()
-`
+```
 
 This will create a test-report folder in the call root. The folder will contain the PDF report, csv sheets showing suspicious activities, diagrams and graphs.
 
