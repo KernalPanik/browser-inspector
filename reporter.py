@@ -2,7 +2,7 @@ from models import VisitInfo
 from ploter import Ploter
 from analyzer import Analyzer
 from browser_inspector import BrowserInspector
-from config import PATH_TO_BROWSER, START_DATE, END_DATE, SUSPICIOUS_SITES, SUSPICIOUS_KEYWORDS
+from config import PATH_TO_BROWSER, START_DATE, END_DATE, SUSPICIOUS_SITES, SUSPICIOUS_KEYWORDS, IGNORE_IP
 import os
 import utilities as utils
 import shutil
@@ -82,6 +82,9 @@ class Reporter:
         return sus_visits_header, sus_visit_paragraph, title_graphs + url_graphs
 
     def _prepare_ip_call_report(self) -> (str, str):
+        if IGNORE_IP:
+            return "", ""
+
         header = "Calls to IP addresses without providing host name"
         no_host_visits_str = ""
         if len(self.browser_inspector.direct_ip_calls) > 0:
