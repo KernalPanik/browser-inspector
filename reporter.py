@@ -41,7 +41,7 @@ class Reporter:
         diagrams_paragraph = "This diagram shows the top 5 websites visited and overall session duration. Overall session duration is a sum of all visit durations combined."
         diagrams_path = os.path.join(self.report_folder, "diagrams.png")
         self.plotter.plot(diagrams_path)
-        return diagrams_path
+        return diagrams_header, diagrams_paragraph, diagrams_path
     
     def _get_graphs(self, hierarchy_list: [], graph_file_name: str) -> []:
         hierarchies = []
@@ -78,10 +78,10 @@ class Reporter:
 
         title_graphs = self._get_graphs(self.browser_inspector.filter_suspicious_sites_by_title(), "sus_titles")
         url_graphs = self._get_graphs(self.browser_inspector.filter_suspicious_sites_by_url(), "sus_urls")
-        return title_graphs + url_graphs
+        return sus_visits_header, sus_visit_paragraph, title_graphs + url_graphs
 
     def _prepare_ip_call_report(self) -> (str, str):
-        header = "Suspicious calls to IP addresses"
+        header = "Calls to IP addresses without providing host name"
         no_host_visits_str = ""
         if len(self.browser_inspector.direct_ip_calls) > 0:
             for ip in self.browser_inspector.direct_ip_calls:
@@ -124,8 +124,8 @@ class Reporter:
         return large_header, paragraph
 
     def build_report(self) -> str:
-        diagrams = self._prepare_plots_to_report()
-        graphs = self._prepare_sus_visits_graph()
+        diagrams_header, diagrams_paragraph, diagrams = self._prepare_plots_to_report()
+        graph_header, graph_paragraph, graphs = self._prepare_sus_visits_graph()
         ip_report_header, ip_report_paragraph = self._prepare_ip_call_report() # if paragraph returned is empty, do not use
         large_header, paragraph = self._prepare_basic_information_section()
         handler = pdf_engine.pdf_start_markdown(self.report_document_path)
@@ -135,11 +135,13 @@ class Reporter:
             pdf_engine.pdf_append_small_header(handler, ip_report_header)
             pdf_engine.pdf_append_paragraph(handler, ip_report_paragraph)
         
-        pdf_engine.pdf_append_small_header(handler, "Usage Statistics")
+        pdf_engine.pdf_append_small_header(handler, diagrams_header)
+        pdf_engine.pdf_append_paragraph(handler, diagrams_paragraph)
         pdf_engine.pdf_append_image(handler, diagrams, title="Usage Statisics")
         pdf_engine.pdf_append_paragraph(handler, "\n\n")
         if len(graphs) > 0:
-            pdf_engine.pdf_append_small_header(handler, "Suspicious Visit Information")
+            pdf_engine.pdf_append_small_header(handler, graph_header)
+            pdf_engine.pdf_append_paragraph(handler, graph_paragraph)
             index = 1
             for graph in graphs:
                 pdf_engine.pdf_append_image(handler, graph, title="Suspicious visits graph-{}".format(index))

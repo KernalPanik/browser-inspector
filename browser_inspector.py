@@ -59,13 +59,13 @@ class BrowserInspector():
     def filter_suspicious_sites_by_url(self) -> []:
         suspicous_visits = []
         for visit_info in self.visit_infos:
+            actual_url = visit_info.url.split("/")[2]
+            if self._looks_like_ipv4_address(actual_url):
+                self.direct_ip_calls.append(visit_info.url)
             for site in SUSPICIOUS_SITES:
-                actual_url = visit_info.url.split("/")[2]
                 if site in actual_url:
                     # print(visit_info.as_dict)
                     suspicous_visits.append(visit_info)
-                elif self._looks_like_ipv4_address(actual_url):
-                    self.direct_ip_calls.append(visit_info.url)
 
         return suspicous_visits
 
