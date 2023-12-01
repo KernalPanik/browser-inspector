@@ -1,5 +1,11 @@
 # Browser History Inspector
 
+To run the tool, configure it in the `config.py` file and run using
+
+```
+python main.py
+```
+
 ## Prerequisites
 
 Required tools can be installed by using provided `tools-uploader` scripts.
