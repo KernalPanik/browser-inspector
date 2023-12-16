@@ -2,7 +2,7 @@ from analyzer import Analyzer
 from config import PATH_TO_BROWSER, START_DATE, END_DATE, SUSPICIOUS_SITES, SUSPICIOUS_KEYWORDS
 from browser_inspector import BrowserInspector
 from adaptors.chromium_inspector import ChromiumInspector
-from config import PATH_TO_BROWSER, START_DATE, END_DATE
+from config import PATH_TO_BROWSER, START_DATE, END_DATE, REPORT_NAME
 from pdf_engine import *
 from ploter import Ploter
 from utilities import *
@@ -57,5 +57,5 @@ if __name__ == "__main__":
 
     inspector = ChromiumInspector()
     history = inspector.get_history_data(PATH_TO_BROWSER, date_to_epoch(START_DATE, TimeEpochFormat.ISO_8601_EPOCH), date_to_epoch(END_DATE, TimeEpochFormat.ISO_8601_EPOCH))
-    reporter = Reporter("test-report", history, inspector)
+    reporter = Reporter(REPORT_NAME, history, inspector)
     reporter.build_report()
