@@ -1,5 +1,5 @@
 # Make sure to have choco installed
 choco install pandoc
-choco isntall MikTex
-choco install anaconda
-conda install graphviz
+choco install MikTex
+choco install anaconda3
+choco install graphviz
